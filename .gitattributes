@@ -1,0 +1,4 @@
+# JavaScript / JSON / env files ใช้ LF เสมอ
+*.js text eol=lf
+*.json text eol=lf
+*.env text eol=lf
