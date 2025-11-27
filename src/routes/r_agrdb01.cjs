@@ -21,11 +21,15 @@ router.get("/", async (req, res) => {
 
 router.get("/sos", async (req, res) => {
   try {
-
-    console.log
     const queryData = req.query;
+    let empno = req.query.id;
     // ส่งกลับเป็น JSON
     const sos = await service.SOS();
+
+    //for (const request of sos) {
+    //  console.log(sos);
+    //}
+
     res.json({
       status: "success",
       sos: sos,

@@ -6,10 +6,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- Routes ---
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next(); // ต้องเรียก next() เพื่อให้ request ไปต่อ
-});
+//app.use((req, res, next) => {
+//  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+//  next(); // ต้องเรียก next() เพื่อให้ request ไปต่อ
+//});
 
 app.use("/", requestsRouter); // mount router
 
