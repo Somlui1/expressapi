@@ -1,6 +1,9 @@
-const sql = require("mssql");
-require("dotenv").config({ path: "../../.env" });
+const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, "../../.env"),
+});
 
+const sql = require("mssql");
 //const config = {
 //  user:  "dev",
 //  password: "dev@agrdb01",
