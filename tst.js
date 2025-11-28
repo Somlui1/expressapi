@@ -1,35 +1,58 @@
-const dayjs = require("dayjs");
-const { fetchRequests } = require("./src/db/agrdb01");
-
-async function main(num) {
+const fetchSOSFromAPI = async () => {
   try {
-    let empno = 10002898;
-    const response = await fetchRequests();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7000); // 7 sec timeout
 
-    const sos = response.filter((req) => req.IT_EMPNO === String(empno));
+    const response = await fetch("http://10.10.3.215:3434/sos?id=10002898", {
+      signal: controller.signal,
+    });
 
-    const result = {
-      value: response.filter((req) => req.REQ_STATUS === "1").length,
+    clearTimeout(timeout);
 
-      requests: response.filter((req) => req.REQ_STATUS === "1"),
+    // ❌ HTTP status error (เช่น 400, 404, 500)
+    if (!response.ok) {
+      return {
+        value: 0,
+        requests: [],
+        errorCode: response.status,
+        errorMessage: `HTTP Error: ${response.status}`,
+        stats: { monthlyAccepted: 0, inProcess: 0 },
+      };
+    }
 
+    const result = await response.json();
+
+    // คืนค่าปกติ
+    return {
+      value: result?.value ?? 0,
+      requests: Array.isArray(result?.requests) ? result.requests : [],
+      errorCode: 0,
+      errorMessage: null,
       stats: {
-        monthlyAccepted: sos.filter((req) => {
-          const reqMonth = dayjs(req.ACEPT_DATE).month(); // เดือนของเคส
-          const nowMonth = dayjs().month(); // เดือนปัจจุบัน
-          return reqMonth === nowMonth;
-        }).length,
-
-        inProcess: sos.filter((req) => Number(req.REQ_STATUS) <= 3).length,
-
-        total: response.filter((req) => Number(req.REQ_STATUS) <= 3).length,
+        monthlyAccepted: result?.stats?.monthlyAccepted ?? 0,
+        inProcess: result?.stats?.inProcess ?? 0,
       },
     };
-
-    console.log(JSON.stringify(result, null, 2));
   } catch (error) {
-    console.error(error);
-  }
-}
+    // ❌ server connect ไม่ได้
+    if (error.name === "AbortError") {
+      return {
+        value: 0,
+        requests: [],
+        errorCode: 408,
+        errorMessage: "Request Timeout",
+        stats: { monthlyAccepted: 0, inProcess: 0 },
+      };
+    }
 
-main();
+    return {
+      value: 0,
+      requests: [],
+      errorCode: -1,
+      errorMessage: "Cannot connect to server",
+      stats: { monthlyAccepted: 0, inProcess: 0 },
+    };
+  }
+};
+
+fetchSOSFromAPI().then(console.log);
