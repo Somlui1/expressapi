@@ -6,7 +6,7 @@ services:
       context: .
       args:
         PORT: ${PORT} # ส่งค่า PORT จาก .env
-    container_name: express-app
+    container_name: SOS_System_express
     ports:
       - "${PORT}:${PORT}"
     env_file:

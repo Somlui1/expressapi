@@ -25,6 +25,11 @@ const config = {
   },
 };
 
+
+//close is 4
+//puase is 3
+// in process is 2
+
 const query = `
 ;WITH src AS (
     SELECT 
@@ -40,10 +45,12 @@ const query = `
         r.IT_EMPNO,
         r.REQ_DATE,
         r.ACEPT_DATE,
-        r.CLOSE_DATE
+        r.CLOSE_DATE,
+        r.REQ_STATUS_ACHIEVE,
+        r.REQ_IT_SUPPORT
     FROM dbo.TBL_REQUEST r
     WHERE LTRIM(RTRIM(r.REQ_IT_SUPPORT)) IN ('1.ITSupport', '3.ERP-SyteLineSupport')
-      AND r.REQ_COMPANY NOT IN ('AS', 'AP', 'AHR', 'AA','AF')
+      AND r.REQ_COMPANY NOT IN ('AS', 'AP', 'AHR', 'AA', 'AF', 'ASP', 'APR','','APC')
       AND r.REQ_STATUS NOT LIKE '%[^0-9]%'
       AND r.REQ_DATE LIKE '[0-3][0-9]-[0-1][0-9]-[1-2][0-9][0-9][0-9] [0-2][0-9]:[0-5][0-9]'
 )

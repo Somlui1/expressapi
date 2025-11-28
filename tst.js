@@ -1,26 +1,14 @@
-//require("dotenv").config({ path: "../../.env" });
-const path = require("path");
-const agrdb01 = require("../db/agrdb01.js");
 const dayjs = require("dayjs");
-const PORT = process.env.PORT || 3000;
+const { fetchRequests } = require("./src/db/agrdb01");
 
-// --- Routes ---
-//{
-//    "status" :{
-//        "total request acept in this month" : {}
-//        ,"total request in process" : {}
-//    },
-//    "data" : []
-//}
-
-async function SOS(num) {
+async function main(num) {
   try {
-    let empno = num;
-    const response = await agrdb01.fetchRequests();
+    let empno = 10002898;
+    const response = await fetchRequests();
 
     const sos = response.filter((req) => req.IT_EMPNO === String(empno));
 
-    return {
+    const result = {
       value: response.filter((req) => req.REQ_STATUS === "1").length,
 
       requests: response.filter((req) => req.REQ_STATUS === "1"),
@@ -37,10 +25,11 @@ async function SOS(num) {
         total: response.filter((req) => Number(req.REQ_STATUS) <= 3).length,
       },
     };
-    //console.log(JSON.stringify(result, null, 2));
+
+    console.log(JSON.stringify(result, null, 2));
   } catch (error) {
     console.error(error);
   }
 }
 
-module.exports = { SOS };
+main();

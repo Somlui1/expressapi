@@ -21,4 +21,4 @@ ENV PORT=${PORT}
 EXPOSE ${PORT}
 
 # รันแอป
-CMD ["node", "src/index.js"]
+CMD ["node", "index.js"]
