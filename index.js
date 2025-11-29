@@ -13,11 +13,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "*");
   next(); // ต้องเรียก next() เพื่อให้ request ไปต่อ
 });
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+app.use(cors());
 
 app.use("/", requestsRouter); // mount router
 
