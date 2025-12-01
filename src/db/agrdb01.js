@@ -25,7 +25,6 @@ const config = {
   },
 };
 
-
 //close is 4
 //puase is 3
 // in process is 2
@@ -63,7 +62,7 @@ WHERE CONVERT(
           SUBSTRING(REQ_DATE, 1, 2) + ' ' +  
           SUBSTRING(REQ_DATE, 12, 5),        
           120
-      ) >= DATEADD(MONTH, -1, GETDATE());
+      ) >= DATEADD(MONTH, -2, GETDATE());
 `;
 
 async function fetchRequests() {
