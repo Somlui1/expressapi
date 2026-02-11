@@ -49,7 +49,7 @@ const query = `
         r.REQ_IT_SUPPORT
     FROM dbo.TBL_REQUEST r
     WHERE LTRIM(RTRIM(r.REQ_IT_SUPPORT)) IN ('1.ITSupport', '3.ERP-SyteLineSupport')
-      AND r.REQ_COMPANY NOT IN ('AS', 'AP', 'AHR', 'AA', 'AF', 'ASP', 'APR','','APC')
+      AND r.REQ_COMPANY NOT IN ('AP', 'AHR', 'AA', 'AF', 'ASP', 'APR','APB','APC')
       AND r.REQ_STATUS NOT LIKE '%[^0-9]%'
       AND r.REQ_DATE LIKE '[0-3][0-9]-[0-1][0-9]-[1-2][0-9][0-9][0-9] [0-2][0-9]:[0-5][0-9]'
 )
