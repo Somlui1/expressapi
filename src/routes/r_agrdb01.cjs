@@ -78,4 +78,22 @@ router.get("/sos/log", async (req, res) => {
     res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 });
+
+router.get("/sos/pending-tickets", async (req, res) => {
+  try {
+    const empId = req.query.id;
+
+    if (!empId) {
+      return res.status(400).json({ status: "error", message: "Missing required query parameter: id" });
+    }
+
+    const response = await service.SOSPendingTickets(empId);
+    res.json(response);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

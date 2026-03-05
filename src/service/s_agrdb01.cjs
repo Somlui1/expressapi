@@ -71,4 +71,28 @@ async function SOSLogByDate(empId, startDate, endDate, isCount) {
   }
 }
 
-module.exports = { SOS, SOSLog, SOSLogByDate };
+async function SOSPendingTickets(empId) {
+  try {
+    const result = await agrdb01.fetchPendingTickets(empId);
+
+    const data = result.map((row) => ({
+      REQ_NO: row.REQ_NO,
+      REQ_EMAIL: row.REQ_EMAIL,
+      REQ_USER_LOGIN: row.REQ_USER_LOGIN,
+      REQ_DES: row.REQ_DES,
+      REQ_DATE: row.REQ_DATE,
+      REQ_STATUS: row.REQ_STATUS,
+    }));
+
+    return {
+      status: "success",
+      count: data.length,
+      data,
+    };
+  } catch (error) {
+    console.error(error);
+    return { status: "error", error: "Failed to fetch pending tickets" };
+  }
+}
+
+module.exports = { SOS, SOSLog, SOSLogByDate, SOSPendingTickets };

@@ -155,4 +155,39 @@ async function fetchSOSLogByDate(empId, startDate, endDate) {
   }
 }
 
-module.exports = { fetchRequests, fetchSOSLog, fetchSOSLogByDate };
+async function fetchPendingTickets(empId) {
+  let pool;
+  try {
+    pool = await sql.connect(config);
+    const request = pool.request();
+    request.input('empId', sql.VarChar, empId);
+
+    const query = `
+      SELECT 
+          r.REQ_NO,
+          r.REQ_EMAIL,
+          r.IT_EMPNO,
+          r.REQ_STATUS,
+          r.REQ_IT_SUPPORT,
+          r.REQ_USER_LOGIN,
+          r.REQ_DES,
+          r.PROBLEM_CAUSE,
+          r.PROBLEM_SOLUTION,
+          r.IMPACT_LEVEL,
+          r.REQ_DATE
+      FROM dbo.TBL_REQUEST AS r
+      WHERE LTRIM(RTRIM(r.REQ_IT_SUPPORT)) IN ('1.ITSupport', '3.ERP-SyteLineSupport')
+      AND r.IT_EMPNO = @empId
+      AND r.REQ_STATUS <= 3
+    `;
+    const result = await request.query(query);
+    return result.recordset;
+  } catch (err) {
+    console.error("Database error:", err);
+    throw err;
+  } finally {
+    if (pool) await pool.close();
+  }
+}
+
+module.exports = { fetchRequests, fetchSOSLog, fetchSOSLogByDate, fetchPendingTickets };
