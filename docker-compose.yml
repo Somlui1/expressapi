@@ -12,6 +12,9 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    volumes:
+      - ./src:/app/src
+      - ./index.js:/app/index.js
 
 networks:
   my-app:

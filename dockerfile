@@ -10,8 +10,6 @@ COPY package*.json ./
 # ติดตั้ง dependencies
 RUN npm install
 
-# คัดลอก source code ทั้งหมด
-COPY . .
 
 # Expose port
 ARG PORT=3000          # default 3000
